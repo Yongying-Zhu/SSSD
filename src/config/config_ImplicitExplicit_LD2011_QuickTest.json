@@ -1,0 +1,46 @@
+{
+    "diffusion_config": {
+        "T": 200,
+        "beta_0": 0.0001,
+        "beta_T": 0.02
+    },
+    "model_config": {
+        "in_channels": 14,
+        "out_channels": 14,
+        "num_res_layers": 20,
+        "res_channels": 128,
+        "skip_channels": 128,
+        "diffusion_step_embed_dim_in": 128,
+        "diffusion_step_embed_dim_mid": 256,
+        "diffusion_step_embed_dim_out": 256,
+        "implicit_dilation_rates": [1, 2, 4, 8],
+        "s4_lmax": 100,
+        "s4_d_state": 32,
+        "s4_dropout": 0.0,
+        "s4_bidirectional": 1,
+        "s4_layernorm": 1
+    },
+    "train_config": {
+        "output_directory": "./results/ld2011_quicktest",
+        "ckpt_iter": "max",
+        "iters_per_ckpt": 500,
+        "iters_per_logging": 50,
+        "n_iters": 5000,
+        "learning_rate": 2e-4,
+        "only_generate_missing": 1,
+        "masking": "rm",
+        "missing_ratio": 0.2,
+        "batch_size": 8,
+        "device": "cuda:0"
+    },
+    "trainset_config": {
+        "train_data_path": "./datasets/train_ld2011.npy",
+        "test_data_path": "./datasets/test_ld2011.npy",
+        "segment_length": 100,
+        "sampling_rate": 100
+    },
+    "gen_config": {
+        "output_directory": "./results/ld2011_quicktest",
+        "ckpt_path": "./results/ld2011_quicktest/"
+    }
+}
