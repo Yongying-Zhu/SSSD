@@ -371,6 +371,10 @@ class S4Layer(nn.Module):
         y_f = u_f * k_f.unsqueeze(0)  # [B, d_model, L_fft]
         y = torch.fft.irfft(y_f, n=2*L)[..., :L]  # [B, d_model, L]
 
+        # === 添加skip connection (D矩阵) - 必须在双向拼接前 ===
+        D = self.kernel.D.unsqueeze(0).unsqueeze(-1)  # [1, d_model, 1]
+        y = y + u * D  # [B, d_model, L]
+
         # === 双向处理 ===
         if self.bidirectional:
             # 后向卷积：反转序列
@@ -382,12 +386,11 @@ class S4Layer(nn.Module):
             y_b = torch.fft.irfft(y_b_f, n=2*L)[..., :L]
             y_b = torch.flip(y_b, dims=[-1])  # 反转回来
 
+            # 后向也添加skip connection
+            y_b = y_b + u * D  # [B, d_model, L]
+
             # 拼接前向和后向
             y = torch.cat([y, y_b], dim=1)  # [B, 2*d_model, L]
-
-        # === 添加skip connection (D矩阵) ===
-        D = self.kernel.D.unsqueeze(0).unsqueeze(-1)  # [1, d_model, 1]
-        y = y + u * D  # [B, d_model, L] 或 [B, 2*d_model, L]
 
         # === 激活和Dropout ===
         y = self.activation(y)
