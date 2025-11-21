@@ -1,0 +1,61 @@
+{
+    "comment": "IEclaude配置文件 - 20%缺失率",
+
+    "seed": 42,
+
+    "data": {
+        "data_path": "/home/zhu/sssdtcn/LD2011_2014.txt",
+        "seq_len": 168,
+        "stride": 84,
+        "train_ratio": 0.7,
+        "normalize": "standard"
+    },
+
+    "model": {
+        "res_channels": 256,
+        "skip_channels": 256,
+        "num_res_layers": 36,
+        "dilation_cycle": 10,
+
+        "tcn_channels": [256, 256, 256],
+        "tcn_kernel_size": 3,
+        "tcn_dilation_rates": [1, 2, 4, 8],
+        "tcn_dropout": 0.0,
+
+        "s4_d_state": 64,
+        "s4_n_layers": 4,
+        "s4_dropout": 0.0,
+        "s4_bidirectional": true
+    },
+
+    "diffusion": {
+        "T": 200,
+        "beta_0": 0.0001,
+        "beta_T": 0.02,
+        "schedule": "linear",
+
+        "embed_dim_in": 128,
+        "embed_dim_mid": 512,
+        "embed_dim_out": 512
+    },
+
+    "train": {
+        "output_dir": "./results/traffic_20",
+        "missing_rate": 0.2,
+        "missing_pattern": "random",
+
+        "batch_size": 8,
+        "epochs": 100,
+        "learning_rate": 0.0002,
+        "weight_decay": 0.0,
+
+        "scheduler": "cosine",
+        "min_lr": 1e-6,
+
+        "save_interval": 10,
+        "num_workers": 0,
+
+        "only_generate_missing": true,
+        "clean_before_train": true
+    }
+}
